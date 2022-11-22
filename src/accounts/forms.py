@@ -1,7 +1,7 @@
 from django import forms
-from django.contrib.auth import authenticate, login, get_user_model
+from django.contrib.auth import authenticate, get_user_model, login
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.utils.safestring import mark_safe
 
 User = get_user_model()
@@ -163,7 +163,7 @@ class LoginForm(forms.Form):
     #             del request.session['guest_email_id']
     #         except:
     #             pass
-    #         if is_safe_url(redirect_path, request.get_host()):
+    #         if url_has_allowed_host_and_scheme(redirect_path, request.get_host()):
     #             return redirect(redirect_path)
     #         else:
     #             return redirect("/")

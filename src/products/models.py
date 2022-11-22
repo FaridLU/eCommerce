@@ -1,16 +1,16 @@
-import random
 import os
+import random
+
 from django.conf import settings
 from django.core.files.storage import FileSystemStorage
-
 from django.db import models
 from django.db.models import Q
-from django.db.models.signals import pre_save, post_save
+from django.db.models.signals import post_save, pre_save
 from django.urls import reverse
-
 from ecommerce.aws.download.utils import AWSDownload
 from ecommerce.aws.utils import ProtectedS3Storage
-from ecommerce.utils import unique_slug_generator, get_filename
+from ecommerce.utils import get_filename, unique_slug_generator
+
 
 def get_filename_ext(filepath):
     base_name = os.path.basename(filepath)
@@ -123,7 +123,7 @@ def upload_product_file_loc(instance, filename):
 
 
 class ProductFile(models.Model):
-    product         = models.ForeignKey(Product)
+    product         = models.ForeignKey(Product, on_delete=models.CASCADE)
     name            = models.CharField(max_length=120, null=True, blank=True)
     file            = models.FileField(
                         upload_to=upload_product_file_loc, 

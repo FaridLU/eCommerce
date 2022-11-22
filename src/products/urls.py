@@ -1,14 +1,10 @@
-from django.conf.urls import url
+from django.urls import re_path
 
-from .views import (
-        ProductListView, 
-        ProductDetailSlugView, 
-        ProductDownloadView
-        )
+from .views import ProductDetailSlugView, ProductDownloadView, ProductListView
 
 urlpatterns = [
-    url(r'^$', ProductListView.as_view(), name='list'),
-    url(r'^(?P<slug>[\w-]+)/$', ProductDetailSlugView.as_view(), name='detail'),
-    url(r'^(?P<slug>[\w-]+)/(?P<pk>\d+)/$', ProductDownloadView.as_view(), name='download'),
+    re_path(r'^$', ProductListView.as_view(), name='list'),
+    re_path(r'^(?P<slug>[\w-]+)/$', ProductDetailSlugView.as_view(), name='detail'),
+    re_path(r'^(?P<slug>[\w-]+)/(?P<pk>\d+)/$', ProductDownloadView.as_view(), name='download'),
 ]
 

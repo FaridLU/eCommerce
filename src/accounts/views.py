@@ -1,21 +1,22 @@
-from django.contrib.auth import authenticate, login, get_user_model
+from django.contrib import messages
+from django.contrib.auth import authenticate, get_user_model, login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib import messages
-from django.core.urlresolvers import reverse
-from django.utils.decorators import method_decorator
-from django.views.generic import CreateView, FormView, DetailView, View, UpdateView
-from django.views.generic.edit import FormMixin
 from django.http import HttpResponse
-from django.shortcuts import render,redirect
-from django.utils.http import is_safe_url
+from django.shortcuts import redirect, render
+from django.urls import reverse
+from django.utils.decorators import method_decorator
+from django.utils.http import url_has_allowed_host_and_scheme
 from django.utils.safestring import mark_safe
-
+from django.views.generic import (CreateView, DetailView, FormView, UpdateView,
+                                  View)
+from django.views.generic.edit import FormMixin
 from ecommerce.mixins import NextUrlMixin, RequestFormAttachMixin
-from .forms import LoginForm, RegisterForm, GuestForm, ReactivateEmailForm, UserDetailChangeForm
-from .models import GuestEmail, EmailActivation
-from .signals import user_logged_in
 
+from .forms import (GuestForm, LoginForm, ReactivateEmailForm, RegisterForm,
+                    UserDetailChangeForm)
+from .models import EmailActivation, GuestEmail
+from .signals import user_logged_in
 
 # @login_required # /accounts/login/?next=/some/path/
 # def account_home_view(request):
@@ -146,7 +147,7 @@ class UserDetailUpdateView(LoginRequiredMixin, UpdateView):
 #                 del request.session['guest_email_id']
 #             except:
 #                 pass
-#             if is_safe_url(redirect_path, request.get_host()):
+#             if url_has_allowed_host_and_scheme(redirect_path, request.get_host()):
 #                 return redirect(redirect_path)
 #             else:
 #                 return redirect("/")

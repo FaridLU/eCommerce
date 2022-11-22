@@ -1,11 +1,11 @@
+from accounts.signals import user_logged_in
 from django.conf import settings
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.sessions.models import Session
 from django.db import models
-from django.db.models.signals import pre_save, post_save
+from django.db.models.signals import post_save, pre_save
 
-from accounts.signals import user_logged_in
 from .signals import object_viewed_signal
 from .utils import get_client_ip
 
@@ -33,9 +33,9 @@ class ObjectViewedManager(models.Manager):
         return self.get_queryset().by_model(model_class, model_queryset=model_queryset)
     
 class ObjectViewed(models.Model):
-    user                = models.ForeignKey(User, blank=True, null=True) # User instance instance.id
+    user                = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True) # User instance instance.id
     ip_address          = models.CharField(max_length=220, blank=True, null=True) #IP Field
-    content_type        = models.ForeignKey(ContentType) # User, Product, Order, Cart, Address
+    content_type        = models.ForeignKey(ContentType, on_delete=models.CASCADE) # User, Product, Order, Cart, Address
     object_id           = models.PositiveIntegerField() # User id, Product id, Order id,
     content_object      = GenericForeignKey('content_type', 'object_id') # Product instance
     timestamp           = models.DateTimeField(auto_now_add=True)
@@ -71,7 +71,7 @@ object_viewed_signal.connect(object_viewed_receiver)
 
 
 class UserSession(models.Model):
-    user                = models.ForeignKey(User, blank=True, null=True) # User instance instance.id
+    user                = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True) # User instance instance.id
     ip_address          = models.CharField(max_length=220, blank=True, null=True) #IP Field
     session_key         = models.CharField(max_length=100, blank=True, null=True) #min 50
     timestamp           = models.DateTimeField(auto_now_add=True)

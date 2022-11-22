@@ -1,18 +1,16 @@
 from datetime import timedelta
+
 from django.conf import settings
-from django.core.urlresolvers import reverse
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
+from django.core.mail import send_mail
 from django.db import models
 from django.db.models import Q
-from django.db.models.signals import pre_save, post_save
-from django.contrib.auth.models import (
-    AbstractBaseUser, BaseUserManager
-)
-
-from django.core.mail import send_mail
+from django.db.models.signals import post_save, pre_save
 from django.template.loader import get_template
+from django.urls import reverse
 from django.utils import timezone
-
 from ecommerce.utils import random_string_generator, unique_key_generator
+
 #send_mail(subject, message, from_email, recipient_list, html_message)
 
 DEFAULT_ACTIVATION_DAYS = getattr(settings, 'DEFAULT_ACTIVATION_DAYS', 7)
@@ -134,7 +132,7 @@ class EmailActivationManager(models.Manager):
 
 
 class EmailActivation(models.Model):
-    user            = models.ForeignKey(User)
+    user            = models.ForeignKey(User, on_delete=models.CASCADE)
     email           = models.EmailField()
     key             = models.CharField(max_length=120, blank=True, null=True)
     activated       = models.BooleanField(default=False)

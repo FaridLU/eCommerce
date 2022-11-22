@@ -1,20 +1,17 @@
-from django.conf.urls import url
-
+from django.urls import re_path
 from products.views import UserProductHistoryView
-from .views import (
-        AccountHomeView, 
-        AccountEmailActivateView,
-        UserDetailUpdateView
-        )
+
+from .views import (AccountEmailActivateView, AccountHomeView,
+                    UserDetailUpdateView)
 
 urlpatterns = [
-    url(r'^$', AccountHomeView.as_view(), name='home'),
-    url(r'^details/$', UserDetailUpdateView.as_view(), name='user-update'),
-    url(r'history/products/$', UserProductHistoryView.as_view(), name='user-product-history'),
-    url(r'^email/confirm/(?P<key>[0-9A-Za-z]+)/$', 
+    re_path(r'^$', AccountHomeView.as_view(), name='home'),
+    re_path(r'^details/$', UserDetailUpdateView.as_view(), name='user-update'),
+    re_path(r'history/products/$', UserProductHistoryView.as_view(), name='user-product-history'),
+    re_path(r'^email/confirm/(?P<key>[0-9A-Za-z]+)/$', 
             AccountEmailActivateView.as_view(), 
             name='email-activate'),
-    url(r'^email/resend-activation/$', 
+    re_path(r'^email/resend-activation/$', 
             AccountEmailActivateView.as_view(), 
             name='resend-activation'),
 ]
